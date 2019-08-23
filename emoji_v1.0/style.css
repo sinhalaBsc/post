@@ -1,0 +1,64 @@
+* {
+   box-sizing: border-box;
+   /*border: 1px solid black;*/
+}
+
+body {
+  margin:0;
+  padding: 0;
+  font-family: Arial,Helvetica, sans-serif;
+  text-align: center;
+  /*background-color: #f7f7f7;*/
+}
+
+
+p{
+  margin: 0;
+}
+
+.emoji-sell{
+  /*border:1px solid black;*/
+  display: inline-block;
+  font-size: 16px;
+  margin: 3px;
+}
+
+.emoji-sell:hover{
+  cursor: pointer;
+}
+
+.emoji-row{
+  /*border:1px solid black;*/
+  text-align: center;
+}
+.emoji-row:last-child{
+  /*border:1px solid black;*/
+  padding-left: 6px;
+  text-align: left;
+}
+
+.emoji-show{
+
+}
+
+.emoji-recent{
+
+}
+
+.emojiBox{
+  border: 1px solid grey;
+  display: inline-block;
+  max-height: 200px;
+  text-align: left;
+  width: 200px;
+  /*box-sizing: content-box;*/
+  overflow: auto;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.emojiBox p{
+  font-size: 14px;
+  color: grey;
+  margin-left: 6px;
+}

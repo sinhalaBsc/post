@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> emoji </title>
+  <meta charset="utf-8" >
+  <meta name='viewport' content='width=device-width, initial-scales=1'>
+  <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<p>this is test emoji</p>
+
+<div class="emojiBox">
+  <div class="emoji-recent">
+      <p class="emoji-recent-header">නිරතුරු</p>
+      <div class="emoji-recent-emoji"></div>
+  </div>
+  <div class="emoji-show">
+    <p class="emoji-show-header">හැඟීම්</p>
+    <div class="emoji-show-emoji"></div>
+  </div>
+  <div class="emoji-types"></div>
+</div>
+
+<script>
+ var emojiShow = document.getElementsByClassName("emoji-show-emoji")[0];
+ var emojiRecent = document.getElementsByClassName("emoji-recent-emoji")[0];
+ var maxRecentCount = 10;
+ var emojiRowCount = 8;
+
+ var emojiCollection = [128578,128577,128579,128580,129296,129297,129298,129299,129300,129301,
+                        129312,129313,129314,129315,129316,129317,129319,129320,129321,129322,
+                        129323,129324,129325,129326,129327,129488
+                     ];
+ var emojiRecentCol = [128578,128577];
+
+  function creatEmojiRow(){
+      var emojiRow = document.createElement('div');
+      emojiRow.className = 'emoji-row';
+      //emojiShow.appendChild(emojiSell);
+      return emojiRow;
+  }
+
+ function creatEmojiSell(item){
+     var emojiSell = document.createElement('div');
+     emojiSell.className = 'emoji-sell';
+     emojiSell.innerHTML="&#"+item+"";
+     emojiSell.setAttribute("type",item);
+     emojiSell.addEventListener("click",clickEmoji,false);
+     //emojiShow.appendChild(emojiSell);
+     return emojiSell;
+ }
+
+ function clickEmoji(){
+   console.log(this.getAttribute("type"));
+   setRecentEmoji(Number(this.getAttribute("type")))
+ }
+
+
+ var emojiRow,emojiSell;
+
+ function creatEmojiMetrix(addPoint,emojiCollection){
+   this.emoji = emojiCollection;
+   this.add = addPoint;
+   this.create = function(){
+       var ad = this.add; // "this" keyword not define inside "forEach" loop
+       this.add.innerHTML=""; //
+       this.emoji.forEach(function(item,index){
+           if(!(index%emojiRowCount)){
+             emojiRow=creatEmojiRow();
+             ad.appendChild(emojiRow);
+           }
+           emojiRow.appendChild(creatEmojiSell(item));
+       });
+   };
+ }
+
+var allEmojiBlock=new creatEmojiMetrix(emojiShow,emojiCollection);
+allEmojiBlock.create();
+var recentEmojiBlock=new creatEmojiMetrix(emojiRecent,emojiRecentCol);
+recentEmojiBlock.create();
+
+
+
+function arraymove(arr, fromIndex, toIndex){
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
+
+function setRecentEmoji(emojiType){
+   var index=emojiRecentCol.indexOf(emojiType);
+
+   if(index>0){
+      arraymove(emojiRecentCol, index, index-1);
+   }
+   if(index<0){
+      emojiRecentCol.push(emojiType);
+   }
+   recentEmojiBlock.create();
+}
+
+// TODO: make limit to "recent emoji" count
+
+</script>
+</body>
+</html>
