@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> text input constructor </title>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+<body>
+  <p> text input tesing </p>
+  <!--
+   this program for useing constructor function how to manage popUp
+   element
+   constructor tasks:
+     1. check the right direction to open popUp element.
+     2. get remember which element held this popUp and his result
+     3. popUp hold time.
+     4. default popUp direction.
+
+   -->
+ <div id="popUp">This is popUp</div>
+
+
+
+<script>
+
+
+var popUp = document.getElementById("popUp");
+
+
+function mouseOn(){
+  console.log("mouse on");
+  popUp.style.display ="inline-block";
+}
+
+function mouseOut(){
+  console.log("mouse out");
+  popUp.style.display ="none";
+}
+
+
+var bodyEle = document.getElementsByTagName("body")[0];
+function createPoint(){
+  var point = document.createElement("div");
+  point.className = "point";
+  point.setAttribute("onmouseenter","mouseOn(this)");
+  point.setAttribute("onmouseout","mouseOut(this)");
+  bodyEle.appendChild(point);
+}
+
+for(var i=0;i<1000;i++){
+  createPoint();
+}
+
+// popup cons function
+var popUpFunc(){
+  this.emitElement;
+  this.holdPopUp;
+
+  this.checkSpace=function(){
+
+  };
+  this.setPopUp = function(){
+
+  };
+  this.mouseEnter = function(e){
+    this.emitElement = e;
+    this.holdPopUp = true; 
+  };
+  this.mouseOut = function(){
+
+  };
+  var rect = e.getBoundingClientRect();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
