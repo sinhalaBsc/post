@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> text input constructor </title>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+<body>
+  <p title="Enter input here" >popup direction testing </p>
+  <!--
+   this program for useing constructor function how to manage popUp
+   element
+   constructor tasks:
+     1. check the right direction to open popUp element.
+     2. get remember which element held this popUp and his result
+     3. popUp hold time.
+     4. default popUp direction.
+
+   -->
+
+
+ <div id="popUp">
+    <div class="popUp-contain">
+        <div class="option" onclick="op(this)">option 01</div>
+        <div class="option" onclick="op(this)">option 02</div>
+        <div class="option" onclick="op(this)">option 03</div>
+        <div class="option" onclick="op(this)">option 04</div>
+    </div>
+ </div>
+
+<!--
+<div id="popUp">This is popUp
+   <div class="option"><span>option 01</span></div>
+   <div class="option"><span>option 02</span></div>
+   <div class="option"><span>option 03</span></div>
+   <div class="option"><span>option 04</span></div>
+</div>
+-->
+
+
+
+<script>
+
+function op(){
+  console.log("click the option >>>");
+}
+
+
+var bodyEle = document.getElementsByTagName("body")[0];
+function createPoint(){
+  var point = document.createElement("div");
+  point.className = "point";
+  point.setAttribute("onmouseenter","profilePopUp.mouseEnter(this)");
+  point.setAttribute("onmouseout","profilePopUp.mouseOut(this)");
+  bodyEle.appendChild(point);
+}
+
+for(var i=0;i<1000;i++){
+  createPoint();
+}
+
+/* *****************************************************************************
+                        popUp Constructor function
+   *****************************************************************************
+*/
+
+
+var popUp = document.getElementById("popUp");
+var popContain = document.getElementsByClassName('popUp-contain')[0];
+
+popContain.addEventListener('mouseenter',function(){
+  profilePopUp.popupHold=true;
+  console.log("popUp mouseenter",profilePopUp.popupHold);
+},false);
+
+popContain.addEventListener('mouseleave',function(){
+  profilePopUp.mouseOut();
+  console.log("popUp  mouseout ",profilePopUp.popupHold);
+},false);
+
+
+// popup cons function
+function popUpFunc(ele){
+  // static variables
+  this.popup={
+     element:ele,
+     Hight:0,
+     Width:0,
+     xmove:0, // "+" - outside , "-" - to inside  from
+     ymove:0,  // "+" - outside , "-" - to inside  from
+     timeOut:500
+  };
+
+  // dynamic variables
+  this.emitElement;
+  this.popupHold;
+  this.popupCorner=0; // clockwise direction 0, 1, 2, 3 position corners of emit elements.
+
+  this.checkSpace=function(){
+     var emitPoint =   this.emitElement.getBoundingClientRect();
+
+     /*  document.body.clientWidth > use for muns scroll-bar width
+         document.body.clientHeight > didn't use because when start this value equle to zero*/
+     var space   =[[emitPoint.left-0 ,document.body.clientWidth -emitPoint.right],
+                   [emitPoint.top-0  ,window.innerHeight-emitPoint.bottom]];
+
+     var sp =[ [(space[0][0]-this.popup.Width-this.popup.xmove) , (space[1][0]-this.popup.Hight-this.popup.ymove),"left","top"],
+               [(space[0][1]-this.popup.Width-this.popup.xmove) , (space[1][0]-this.popup.Hight-this.popup.ymove),"right","top"],
+               [(space[0][1]-this.popup.Width-this.popup.xmove) , (space[1][1]-this.popup.Hight-this.popup.ymove),"right","bottom"],
+               [(space[0][0]-this.popup.Width-this.popup.xmove) , (space[1][1]-this.popup.Hight-this.popup.ymove),"left","bottom"]];
+
+     // check ability user's commanded direction to popUp
+     if(sp[this.popupCorner][0]>0 && sp[this.popupCorner][1]>0){
+       return sp[this.popupCorner];
+     }
+     // check clockwise direction to popUp
+     /*
+         0  ____  1
+           |    |
+         3 |____| 2
+     */
+     for(var i=0; i<sp.length; i++ ){
+       if(sp[i][0]>0 && sp[i][1]>0){
+         return sp[i];
+       }
+     }
+     console.log("error : space is not enought to open this popUp window");
+     return [0,0,"left","top"];
+  };
+
+  this.setPopUp = function(cordinate){
+      console.log(cordinate);
+      this.popup.element.style.left=null;  // remove previce
+      this.popup.element.style.right=null;
+      this.popup.element.style.top=null;
+      this.popup.element.style.bottom=null;
+      this.popup.element.style[cordinate[2]] = cordinate[0]+"px";
+      this.popup.element.style[cordinate[3]] = cordinate[1]+"px";
+      //this.popup.element.style.display ="inline-block";
+      this.popup.element.style.visibility="visible";
+      this.popup.element.style.transform="translateY(-5px)";
+      this.popup.element.style.opacity="1";
+
+  };
+
+  this.dismissPopUp = function(){
+        var time = this.popup.timeOut;
+        setTimeout(()=>{
+            if(!this.popupHold){
+               console.log("element mouseOut ^^:",this.popupHold);
+              //this.popup.element.style.display ="none";
+              this.popup.element.style.visibility="hidden";
+              this.popup.element.style.opacity="0";
+              this.popup.element.style.transform="translateY(0px)";
+            }
+        },time);
+  };
+
+  this.mouseEnter = function(e){
+    this.emitElement = e;
+    this.popupHold = true;
+    console.log("element mouseEnter :",this.popupHold);
+
+    var cordinate = this.checkSpace();
+    this.setPopUp(cordinate);
+
+  };
+
+  this.mouseOut = function(e){
+     console.log("element mouseOut &&:",this.popupHold);
+     this.popupHold =false;
+     this.dismissPopUp();
+     //this.popupHold=false;
+  };
+
+  this.autoSize = function(){
+    var popup = this.popup.element.getBoundingClientRect();
+    this.popup.Hight= popup.height;
+    this.popup.Width= popup.width;
+
+  };
+
+} // end of the constructor popUp function
+
+
+var profilePopUp = new popUpFunc(popUp);
+profilePopUp.autoSize();
+/*
+profilePopUp.popup.Hight=200;
+profilePopUp.popup.Width=150;*/
+profilePopUp.popup.ymove=-10;
+profilePopUp.popup.xmove=-10;
+// profilePopUp.popup.timeOut=0.5;
+
+
+</script>
+</body>
+</html>
