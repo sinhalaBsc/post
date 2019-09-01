@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> text input constructor </title>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+<body>
+<!--
+ This project make link three for NodeJs route and browser reload pages
+-->
+
+
+
+<script>
+
+function linkFunc(){
+   // static
+   /* right commnads list queue for validation
+      and have add maxim of queue for this object*/
+   this.cmdQueue=["samadhi","laksahan","piyasi"];
+   this.domainName="mutx.ru";
+
+   // dynamic
+   this.cmdList=["samadhi","laksahan","piyasi"];
+
+   this.validation=function(){
+     /* function check is user remake his own commands to this router*/
+     var cmdChain = () => {
+       for(var i=0;i<this.cmdList.length;i++){
+         console.log(this.cmdQueue[i],this.cmdList[i]);
+         if(this.cmdQueue[i]!=this.cmdList[i]){return false}
+       }
+       return true;
+     };
+     return this.cmdList.length<=this.cmdQueue.length && cmdChain();
+   };
+
+   // only for browser
+   this.linkCurrent=function(){
+     return window.location.href;
+   };
+   this.isOwnDomain = function(){
+     return window.location.hostname == "mutx.ru";
+   };
+   this.removeLast=function(){
+
+   };
+   this.addLast=function(){
+
+   };
+   this.getRoute =function(){
+
+   };
+}
+
+var testLink = new linkFunc();
+
+console.log(testLink.validation());
+</script>
+</body>
+</html>
