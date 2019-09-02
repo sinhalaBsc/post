@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> text input constructor </title>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+<body>
+  <p> text input tesing </p>
+
+<div class="inputText">
+
+  <div  class="inputText-func-wrapper">
+        <div class="inputText-func" >
+            <div class="icon inputText-func-atachment" >&#128206;
+                <div class="inputText-atachment-types">
+                    <div class="atachment-types image">ජායාරුප</div>
+                    <div class="atachment-types video">සලරුප</div>
+                    <div class="atachment-types audio">ශ්‍රවන</div>
+                    <div class="atachment-types document">ගොණු</div>
+                </div>
+            </div>
+            <div class="icon inputText-func-camera"  > &#x1F4F7; </div>
+            <div class="icon inputText-func-emoji"  > &#x1F610; </div>
+            <div class="icon inputText-func-sent" onclick="newLine()"  >&#10147; </div>
+        </div>
+
+        <div class="inputText-uploads"></div>
+        <textarea id="inputTextArea" rows="1" cols="50" placeholder="type your comment..." onclick="textInput.resize(this)" oninput="textInput.resize(this)" ></textarea>
+  </div>
+
+</div>
+
+<div id="result" ></div>
+
+<script>
+
+// TODO:  this is constructor function for "Text Input"
+/* v 1.0
+make this as dynamic create. because we have to fix this box on the Dom.
+
+constructor:
+     1.resize text field with text input
+     2.clear text field
+     3.realtime
+                1. last word
+                2. spell correction
+                3. grammer correction
+                4. charector count
+
+     4.stop typing when reach max characters.
+     5.check when copy-past text.(event to check all text and size)
+
+  v1.1
+   make dynamic this.elemet inside the constructor function because comments-inputText need more than one
+    - open text input at one time.
+*/
+
+var inputTextArea=document.getElementById("inputTextArea");
+var showResult = document.getElementById("result");
+
+function textAreaFunc(){
+  this.element ;
+  console.log("e", this.element);
+  this.resize =function(e){
+      this.element=e;
+      this.element.style.height = "5px"; // reduse textarea height when multiline delete text
+      // frist make minum scroll height()"5px") and after resize textarea element.
+      this.element.style.height = 15 + (this.element.scrollHeight)+"px";
+      if(this.element.offsetHeight>299){
+         this.element.style.overflow= "hidden";
+         this.element.style.overflowY= "scroll";
+      }else{
+
+      }
+
+      if(this.element.value==""){
+        // this.element.setAttribute("rows","1");
+        this.element.style.height = "5px";
+      }
+  };
+  this.addLineBreaks=function(e){
+    this.element=e;
+    // add line-breaks to all text inside textarea.
+    console.log(this.element.value);
+    var text = this.element.value;
+    //text = text.replace(/\s/g, '&nbsp;');
+    text= text.replace(/\r?\n/g, '<br/>');
+    console.log(text);
+    showResult.innerHTML = text;
+  };
+  this.getSelected=function(e){
+    this.element=e;
+    // return which user highlight text using mouse
+    var start = this.element.selectionStart;
+    var finish = this.element.selectionEnd;
+    var sel = this.element.value.substring(start, finish);
+    return sel;
+  };
+  this.removeAllTags=function(text){
+    // return removed HTML Tags from text
+    //var text = this.element.value;
+    text= text.replace(/<\/?[^>]+(>|$)/g,'');
+    return text;
+  };
+  this.detectHTMLTags=function(e){
+    this.element=e;
+    // return removed HTML Tags from text
+    var text = this.element.value;
+    text= text.replace(/<\/?[^>]+(>|$)/g,'');
+    return text;
+  };
+
+}
+
+
+var textInput = new textAreaFunc();
+// console.log("dom" ,textInput.element);
+// textInput.resize();
+
+
+/*
+inputTextArea.addEventListener("click",function(){
+   //textInput.addNewLine();
+   textInput.resize();
+},false );
+
+inputTextArea.addEventListener("input",function(){
+    textInput.resize();
+},false );
+
+if(inputTextArea.value.length){  // when reload browser with textarea value
+  inputTextArea.click();         // fire function when click the  textarea element
+}
+*/
+
+function newLine(){
+  //textInput.addLineBreaks();
+}
+
+</script>
+</body>
+</html>

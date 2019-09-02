@@ -1,0 +1,86 @@
+* {
+   box-sizing: border-box;
+   /*border: 1px solid black;*/
+}
+
+body {
+  margin:0;
+  padding: 0;
+  font-family: Arial,Helvetica, sans-serif;
+  text-align: center;
+  /*background-color: #f7f7f7;*/
+}
+
+.inputText{
+  width: 520px;
+}
+.inputText-func-wrapper{
+  border: 1px solid blue;
+  position: relative;
+}
+
+.inputText-func{
+  display: inline-block;
+  position: absolute;
+  bottom: 5px;
+  right:15px;
+}
+
+.inputText-func .icon{
+  float: left;
+  margin: 0 3px;
+  font-size: 20px;
+}
+
+.inputText-func .icon:hover{
+ cursor: pointer;
+ color: grey;
+}
+
+
+.inputText-func-wrapper textarea{
+  border: 1px solid black;
+  resize: none;
+  border-radius: 5px;
+  padding: 5px;
+  overflow: hidden;
+  overflow-y:hidden;
+  width:95%;
+  min-height: 40px;
+  max-height: 300px;
+  margin: 5px;
+  font-size: 14px;
+}
+
+
+.inputText-func-atachment:hover .inputText-atachment-types{
+  display: inline-block;
+}
+
+.inputText-atachment-types{
+  display: none;
+  border: 1px solid grey;
+  position: absolute;
+  top: 20px;
+  left:-30px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.atachment-types{
+  margin: 4px;
+  margin-bottom: 8px;
+}
+
+.inputText .atachment-types:hover{
+  background-color:  #d6eaf8 ;
+}
+
+
+#result{
+  border: 1px solid black;
+  width: 520px;
+  height: 50px;
+  text-align: left;
+  margin-top: 10px;
+}
