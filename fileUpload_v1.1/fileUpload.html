@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> text input constructor </title>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+   <script src="domCreate.js"></script>
+<body>
+  <p> text input tesing </p>
+
+<div class="inputText">
+
+    <form  id="uploadForm" class="imgupload-box-form" enctype="multipart/form-data"  method="post" >
+       <input type="file"  id="myfile" class="upload-browse"  data-multiple-caption="{count} added files" multiple onchange="commentUpload.selected(this)">
+       <!--
+       <div class="upload">
+             <progress class="upload-progressBar" value="10" max="100" ></progress>
+             <div class="upload-item-name">the_name</div>
+             <div class="upload-item-state">uploading.. 0%</div>
+             <div class="upload-item-cancel" onclick="commentUpload.cancel(this)">&times;</div>
+       </div>
+     -->
+   </form>
+
+
+  <div  class="inputText-func-wrapper">
+        <div class="inputText-func" >
+            <div class="icon inputText-func-atachment" >&#128206;
+                <div class="inputText-atachment-types">
+                    <div class="atachment-types image" type="image" onclick="commentUpload.browseFiles(this)" >ජායාරුප</div>
+                    <div class="atachment-types video" type="video" onclick="commentUpload.browseFiles(this)" >සලරුප</div>
+                    <div class="atachment-types audio" type="audio" onclick="commentUpload.browseFiles(this)" >ශ්‍රවන</div>
+                    <div class="atachment-types document" type="document" onclick="commentUpload.browseFiles(this)">ගොණු</div>
+                </div>
+            </div>
+            <div class="icon inputText-func-camera"  > &#x1F4F7; </div>
+            <div class="icon inputText-func-emoji"  > &#x1F610; </div>
+            <div class="icon inputText-func-sent" onclick="newLine()" >&#10147; </div>
+        </div>
+
+        <div class="inputText-uploads"></div>
+        <textarea id="inputTextArea" rows="1" cols="50" placeholder="type your comment..." onclick="textInput.resize(this)" oninput="textInput.resize(this)" ></textarea>
+  </div>
+
+</div>
+
+<div id="result" ></div>
+
+
+
+<script>
+
+// TODO:  this is constructor function for upload with text input
+/* v 1.0
+
+*/
+
+var inputTextArea=document.getElementById("inputTextArea");
+var showResult = document.getElementById("result");
+
+function textAreaFunc(){
+  this.element ;
+  console.log("e", this.element);
+  this.resize =function(e){
+      this.element=e;
+      this.element.style.height = "5px"; // reduse textarea height when multiline delete text
+      // frist make minum scroll height()"5px") and after resize textarea element.
+      this.element.style.height = 15 + (this.element.scrollHeight)+"px";
+      if(this.element.offsetHeight>299){
+         this.element.style.overflow= "hidden";
+         this.element.style.overflowY= "scroll";
+      }else{
+
+      }
+
+      if(this.element.value==""){
+        // this.element.setAttribute("rows","1");
+        this.element.style.height = "5px";
+      }
+  };
+  this.addLineBreaks=function(e){
+    this.element=e;
+    // add line-breaks to all text inside textarea.
+    console.log(this.element.value);
+    var text = this.element.value;
+    //text = text.replace(/\s/g, '&nbsp;');
+    text= text.replace(/\r?\n/g, '<br/>');
+    console.log(text);
+    showResult.innerHTML = text;
+  };
+  this.getSelected=function(e){
+    this.element=e;
+    // return which user highlight text using mouse
+    var start = this.element.selectionStart;
+    var finish = this.element.selectionEnd;
+    var sel = this.element.value.substring(start, finish);
+    return sel;
+  };
+  this.removeAllTags=function(text){
+    // return removed HTML Tags from text
+    //var text = this.element.value;
+    text= text.replace(/<\/?[^>]+(>|$)/g,'');
+    return text;
+  };
+  this.detectHTMLTags=function(e){
+    this.element=e;
+    // return removed HTML Tags from text
+    var text = this.element.value;
+    text= text.replace(/<\/?[^>]+(>|$)/g,'');
+    return text;
+  };
+
+}
+
+
+var textInput = new textAreaFunc();
+
+/*
+
+// if you make textArea dynamiclly then no need to make refresh remake
+
+if(inputTextArea.value.length){  // when reload browser with textarea value
+  inputTextArea.click();         // fire function when click the  textarea element
+}
+*/
+
+function newLine(){
+  //textInput.addLineBreaks();
+}
+
+var uploadForm;// = document.getElementById("uploadForm");
+
+uploadDom={
+     upload:{
+       upload:["div"    ,"uploadForm"  , "upload"        ,"upload"              ,""],
+       progressBar:["progress"    ,"upload"  , "uploadProgressBar"        ,"upload-progressBar"        ,"" ,"value=10" ,"max=100"],
+       item_name:["div"    ,"upload"  , "uploadItemName"        ,"upload-item-name"        ,"the_name"],
+       item_state:["div"    ,"upload"  , "uploadItemState"        ,"upload-item-state"        ,"uploading.. 0%"],
+       item_cancel:["div"    ,"upload"  , "uploadItemCancel"        ,"upload-item-cancel"        ,"&times;" ,"onclick=commentUpload.cancel(this)"],
+     },
+};
+
+
+
+
+// upload constructor function
+/* concepts
+#user can multiselect for upload but uploading data
+ only one by one.
+
+*/
+
+function uploadFunc(){
+  this.selectForm;
+  this.files;
+  this.uploadState=false;
+  this.uploadElement; // current upload element
+
+  this.cancel = function(e){
+    e.parentNode.style.display="none";
+  };
+
+  this.complete = function(e){
+    // after processing this function will fire
+    e.parentNode.style.display="none";
+  };
+
+  this.processing = function(e){
+    // set text "item-state" as processing
+  };
+
+  this.browseFiles = function(e){
+    // fire when user browse upload types of files
+    console.log("upload type ",e.getAttribute("type"));
+    // follwing element can get using popup constructor in production version
+    document.getElementById("myfile").click();
+  };
+
+  this.display =function(f){
+    // make "n" count of upload boxs
+    uploadForm=this.selectForm;
+    uploadDom.upload.item_name[4]=f.name;
+
+    Object.keys(uploadDom.upload).forEach(function(item){
+    domCreator.createTag(uploadDom.upload[item]);
+    });
+
+  };
+  this.uploading =function(){
+
+  };
+  this.selected = function(e){
+    // fire when user browser and select upload  files
+    this.selectForm=e.parentNode; // for display function
+    this.files = e.files;
+    console.log("e.files ",e.files);
+
+    for(var i=0 ; i<this.files.length ; i++){
+        this.display(this.files[i]);
+    }
+
+  };
+}
+
+var commentUpload = new uploadFunc();
+
+
+
+
+
+
+</script>
+</body>
+</html>
